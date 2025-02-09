@@ -10,8 +10,11 @@ import asyncio
 from browser_use import Agent
 import os
 
+# Load environment variables from .env file if present
 load_dotenv()
 
+# Retrieve the API key from the environment
+api_key = os.getenv('OPENAI_API_KEY')
 
 @dataclass
 class ActionResult:
@@ -48,14 +51,11 @@ def parse_agent_history(history_str: str) -> None:
 
 async def run_browser_task(
 	task: str,
-	api_key: str,
+	api_key: str = api_key,  # Default to the environment variable
 	model: str = 'gpt-4o',
 	headless: bool = True,
 ) -> AgentHistoryList:
-	env_api_key = os.getenv('OPENAI_API_KEY')
-	if env_api_key:
-		api_key = env_api_key
-	elif not api_key.strip():
+	if not api_key:
 		return AgentHistoryList(all_results=[], all_model_outputs=[])
 
 	try:
