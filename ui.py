@@ -125,7 +125,7 @@ def create_ui():
 			"""
 			<div style="text-align: center; font-size: 24px; color: #e0e0e0;">
 				<h1>Gopher It!</h1>
-				<img src="gopherit.webp" alt="Gopher It Logo" style="width:100px;height:auto;">
+				<img src="gopherit.png" alt="Gopher It Logo" style="width:100px;height:auto;">
 			</div>
 			"""
 		)
