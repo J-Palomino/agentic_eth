@@ -89,7 +89,7 @@ async def run_browser_task(
 
 
 def format_agent_output(agent_history: AgentHistoryList) -> str:
-	formatted_output = "# Task Results\n\n"
+	formatted_output = "# YourTask Results\n\n"
 	
 	for i, result in enumerate(agent_history.all_results, start=1):
 		if result.extracted_content:
@@ -125,7 +125,6 @@ def create_ui():
 			"""
 			<div style="text-align: center; font-size: 24px; color: #e0e0e0;">
 				<h1>Gopher It!</h1>
-				<img src="gopherit.webp" alt="Gopher It Logo" style="width:100px;height:auto;">
 			</div>
 			"""
 		)
@@ -133,7 +132,7 @@ def create_ui():
 		with gr.Row():
 			with gr.Column(scale=1, min_width=300):
 				api_key = gr.Textbox(
-					label='OpenAI API Key', 
+					label='API Key', 
 					placeholder='sk-...', 
 					type='password'
 				)
@@ -177,4 +176,4 @@ def create_ui():
 
 if __name__ == '__main__':
 	demo = create_ui()
-	demo.launch(server_name="0.0.0.0", server_port=7860,pwa=True)
+	demo.launch(server_name="0.0.0.0", server_port=7860,pwa=True, pwa=True)

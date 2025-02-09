@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /
 
 # Copy the requirements file into the container
 COPY requirements.txt .
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 7860
 
 # Command to run the application
-CMD ["python", "ui.py"] 
+CMD ["python", "ui.py"]
