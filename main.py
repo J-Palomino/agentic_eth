@@ -51,13 +51,12 @@ async def run_browser_task(
 	api_key: str,
 	model: str = 'gpt-4o',
 	headless: bool = True,
-) -> str:
-	# Check if the API key is set in the environment
+) -> AgentHistoryList:
 	env_api_key = os.getenv('OPENAI_API_KEY')
 	if env_api_key:
 		api_key = env_api_key
 	elif not api_key.strip():
-		return 'API key needed!'
+		return AgentHistoryList(all_results=[], all_model_outputs=[])
 
 	try:
 		agent = Agent(
@@ -65,10 +64,28 @@ async def run_browser_task(
 			llm=ChatOpenAI(model='gpt-4o'),
 		)
 		result = await agent.run()
-		#  TODO: The result cloud be parsed better
-		return result
+		
+		# Assuming result is a list of dictionaries
+		all_results = []
+		all_model_outputs = []
+
+		# Example parsing logic (adjust based on actual result structure)
+		for res in result:
+			action_result = ActionResult(
+				is_done=res.get('is_done', False),
+				extracted_content=res.get('extracted_content', None),
+				error=res.get('error', None),
+				include_in_memory=res.get('include_in_memory', False)
+			)
+			all_results.append(action_result)
+			all_model_outputs.append(res)  # or some specific part of res
+
+		return AgentHistoryList(all_results=all_results, all_model_outputs=all_model_outputs)
 	except Exception as e:
-		return f'Error: {str(e)}'
+		return AgentHistoryList(
+			all_results=[ActionResult(is_done=False, extracted_content=None, error=str(e), include_in_memory=False)],
+			all_model_outputs=[]
+		)
 
 
 def format_agent_output(agent_history: AgentHistoryList) -> str:
@@ -139,15 +156,19 @@ def create_ui():
 				output = gr.Markdown(
 					label='Output'
 				)
+				image_output = gr.Image(
+					label='Agent History GIF'
+				)
 
 		def on_submit(task, api_key, model, headless):
 			agent_history = asyncio.run(run_browser_task(task, api_key, model, headless))
-			return format_agent_output(agent_history)
+			gif_path = "agent_history.gif"  # Path to the pre-saved GIF
+			return format_agent_output(agent_history), gif_path
 
 		submit_btn.click(
 			fn=on_submit,
 			inputs=[task, api_key, model, headless],
-			outputs=output,
+			outputs=[output, image_output],
 		)
 
 	return interface
@@ -155,4 +176,4 @@ def create_ui():
 
 if __name__ == '__main__':
 	demo = create_ui()
-	demo.launch()
+	demo.launch(pwa=True)
