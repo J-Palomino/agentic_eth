@@ -1,0 +1,62 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Docker
+*.dockerfile
+docker-compose.override.yml
+docker-compose.yml
+.dockerignore
+.docker/
+
+# Logs
+logs/
+*.log
+nohup.out
+
+# Local development files
+*.swp
+*.swo
+.idea/
+.vscode/
+*.bak
+
+# Python environment files
+*.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.example
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.spec
+
+# Dependencies
+pip-log.txt
+pip-delete-this-directory.txt
+poetry.lock
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Coverage reports
+.coverage
+htmlcov/
+*.cover
+*.coverage.*
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy
+.mypy_cache
