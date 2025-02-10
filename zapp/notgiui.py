@@ -61,7 +61,7 @@ async def run_browser_task(
 	try:
 		agent = Agent(
 			task=task,
-			llm=ChatOpenAI(model='gpt-4o'),
+			llm=ChatOpenAI(model='gpt-4o', api_key=api_key),
 		)
 		result = await agent.run()
 		
@@ -89,7 +89,7 @@ async def run_browser_task(
 
 
 def format_agent_output(agent_history: AgentHistoryList) -> str:
-	formatted_output = "# YourTask Results\n\n"
+	formatted_output = "# Your Task Results\n\n"
 	
 	for i, result in enumerate(agent_history.all_results, start=1):
 		if result.extracted_content:
@@ -124,7 +124,7 @@ def create_ui():
 		gr.Markdown(
 			"""
 			<div style="text-align: center; font-size: 24px; color: #e0e0e0;">
-				<h1>Gopher It!</h1>
+				<h1>GopherZIt!</h1>
 			</div>
 			"""
 		)
@@ -176,4 +176,4 @@ def create_ui():
 
 if __name__ == '__main__':
 	demo = create_ui()
-	demo.launch(server_name="0.0.0.0", server_port=7860,pwa=True, pwa=True)
+	demo.launch(server_name="0.0.0.0", server_port=7860, pwa=True)

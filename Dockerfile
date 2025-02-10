@@ -16,5 +16,8 @@ COPY . .
 # Expose the port that Gradio will run on
 EXPOSE 7860
 
+# Set Python to unbuffered mode
+ENV PYTHONUNBUFFERED=1
+
 # Command to run the application
 CMD ["python", "ui.py"]

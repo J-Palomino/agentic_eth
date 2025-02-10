@@ -9,6 +9,7 @@ from typing import Optional, List
 import asyncio
 from browser_use import Agent
 import os
+from datetime import datetime
 
 # Load environment variables from .env file if present
 load_dotenv()
@@ -61,7 +62,7 @@ async def run_browser_task(
 	try:
 		agent = Agent(
 			task=task,
-			llm=ChatOpenAI(model='gpt-4o'),
+			llm=ChatOpenAI(model='gpt-4o', api_key=api_key),
 		)
 		result = await agent.run()
 		
@@ -162,9 +163,32 @@ def create_ui():
 				)
 
 		def on_submit(task, api_key, model, headless):
-			agent_history = asyncio.run(run_browser_task(task, api_key, model, headless))
-			gif_path = "agent_history.gif"  # Path to the pre-saved GIF
-			return format_agent_output(agent_history), gif_path
+			# Print the API key
+			print(f"API Key: {api_key}")
+
+			# Record the time when the task is submitted
+			submit_time = datetime.now()
+			print(f"Task submitted at: {submit_time}")
+
+			# Run the task
+			try:
+				agent_history = asyncio.run(run_browser_task(task, api_key, model, headless))
+				print("Task completed successfully.")
+			except Exception as e:
+				print(f"Error running task: {e}")
+				return f"Error: {e}", None
+
+			# Save the GIF with a timestamp
+			timestamp = submit_time.strftime("%Y%m%d%H%M%S")
+			gif_path = f"agent_history_{timestamp}.gif"
+			print(f"GIF saved as: {gif_path}")
+
+			# Check if the current time is after the submit time
+			if datetime.now() > submit_time:
+				return format_agent_output(agent_history), gif_path
+			else:
+				# If no GIF is available, return the active output
+				return format_agent_output(agent_history), None
 
 		submit_btn.click(
 			fn=on_submit,
@@ -177,4 +201,4 @@ def create_ui():
 
 if __name__ == '__main__':
 	demo = create_ui()
-	demo.launch(server_name="0.0.0.0", server_port=7860,pwa=True)
+	demo.launch(server_name="0.0.0.0", server_port=7860, pwa=True)
